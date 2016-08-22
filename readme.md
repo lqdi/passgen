@@ -21,8 +21,16 @@ If you wish to generate hashes for another string, you can fill in the "Password
 ## Command-line usage
 ![Web](http://extranet.lqdi.net/interno/passgen/screenshot_cli.png)
 
+Generates a password:
+
 ```
 php passgen [<length=12> <useSymbols=1>]
+```
+
+Computes a hash based on the input string:
+
+```
+php hashgen <string>
 ```
 
 

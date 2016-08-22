@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+
+
+if($argc < 1) {
+	echo "\n";
+
+	echo "--------------\n";
+	echo "LQDI HASH GENERATOR - V1.0\n";
+	echo "Usage: php hashgen <string>\n";
+	echo "--------------\n";
+
+	exit();
+}
+
+$string = join(" ", array_slice($argv, 1));
+
+echo "\n\n";
+
+echo "--------------\n";
+echo "String: \t\t \"{$string}\" \n";
+echo "--------------\n";
+echo "\nMD5: \t\t\t " . md5($string);
+echo "\nSHA1: \t\t\t " . sha1($string);
+echo "\nSHA256:\t\t\t " . hash("sha256", $string);
+echo "\nCRC32: \t\t\t " . crc32($string);
+echo "\nHASH_BCRYPT:\t\t " . md5($string);
+echo "\nHASH_DEFAULT:\t\t " . md5($string);
+echo "\n--------------\n";
+echo "\n\n";
+
+exit();
+
