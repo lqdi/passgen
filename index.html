@@ -1,0 +1,143 @@
+<!doctype html>
+<html xmlns:ng="http://angularjs.org" ng-app="app">
+	<head>
+		<title>Password Generator</title>
+
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+
+		<script src="js/jquery-3.1.0.min.js"></script>
+		<script src="js/angular.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/clipboard.min.js"></script>
+
+	</head>
+	<body ng-controller="PasswordGeneratorCtrl">
+
+		<div class="container">
+
+			<div class="col-md-12">
+				<h1>LQDI Password Generator <small>v1.0</small></h1>
+				<hr />
+			</div>
+
+
+			<div class="col-md-6">
+				<div class="panel panel-info">
+					<div class="panel-heading">Password parameters</div>
+					<div class="panel-body">
+
+						<div class="form-group">
+							<label for="fld-charLength">Char length</label>
+							<input class="form-control" id="fld-charLength" type="number" min="1" step="1" max="256" ng-model="charLength" />
+						</div>
+
+						<div class="form-group">
+							<label for="chk-useSymbols-yes">Use symbols?</label>
+
+							<div>
+								<label class="radio-inline" for="chk-useSymbols-yes">
+									<input type="radio" id="chk-useSymbols-yes" ng-value="true" ng-model="useSymbols"> Yes
+								</label>
+								<label class="radio-inline" for="chk-useSymbols-no">
+									<input type="radio" id="chk-useSymbols-no" ng-value="false" ng-model="useSymbols"> No
+								</label>
+							</div>
+
+
+						</div>
+
+					</div>
+					<div class="panel-footer clearfix">
+						<a class="btn btn-primary pull-right" ng-click="generate()">Generate</a>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-success">
+					<div class="panel-heading">Generated password</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label for="fld-password">Password</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="fld-password" readonly ng-model="password">
+								<span class="input-group-btn">
+									<a class="btn btn-copy btn-success" data-clipboard-target="#fld-password"><i class="fa fa-clipboard"></i></a>
+								</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="fld-bcryptHash">BCRYPT Hash</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="fld-bcryptHash" readonly ng-model="bcryptHash">
+								<span class="input-group-btn">
+									<a class="btn btn-copy btn-success" data-clipboard-target="#fld-bcryptHash"><i class="fa fa-clipboard"></i></a>
+								</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="fld-passwdHash">PHP-PASSWD Hash</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="fld-passwdHash" readonly ng-model="passwdHash">
+								<span class="input-group-btn">
+									<a class="btn btn-copy btn-success" data-clipboard-target="#fld-passwdHash"><i class="fa fa-clipboard"></i></a>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			var DICT_ALPHANUMERIC = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			var DICT_SYMBOLS = "@!#%*&+";
+
+			angular.module('app', []).controller('PasswordGeneratorCtrl', function ($scope, $http) {
+
+				console.log("LQDI PASSWORD GENERATOR - v1.0");
+
+				new Clipboard('.btn-copy');
+
+				$scope.charLength = 12;
+				$scope.useSymbols = true;
+
+				$scope.password = "";
+				$scope.bcryptHash = "";
+				$scope.passwdHash = "";
+
+				$scope.generate = function() {
+
+					var dict = DICT_ALPHANUMERIC;
+					if($scope.useSymbols) dict += DICT_SYMBOLS;
+
+					$scope.password = generatePassword($scope.charLength, dict);
+
+					console.log("Generated password: ", $scope.password);
+
+					$http.get('genhash.php', {params: {password: $scope.password}}).then(function (res) {
+						console.log("Generated hashes: ", res.data);
+
+						$scope.bcryptHash = res.data.bcrypt;
+						$scope.passwdHash = res.data.default;
+					});
+
+				};
+
+				function generatePassword(length, charset) {
+					var retVal = "";
+
+					for (var i = 0, n = charset.length; i < length; ++i) {
+						retVal += charset.charAt(Math.floor(Math.random() * n));
+					}
+
+					return retVal;
+				}
+
+			});
+		</script>
+
+	</body>
+</html>
