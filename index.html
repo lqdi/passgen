@@ -37,7 +37,7 @@
 					<div class="panel-body">
 
 						<div class="form-group">
-							<label for="fld-charLength">Char length</label>
+							<label for="fld-charLength">Char length <small>(max: 256)</small></label>
 							<input class="form-control" id="fld-charLength" type="number" min="1" step="1" max="256" ng-model="charLength" />
 						</div>
 
@@ -126,6 +126,9 @@
 				$scope.passwdHash = "";
 
 				$scope.generate = function() {
+
+					if(!$scope.charLength) $scope.charLength = 12;
+					if($scope.charLength > 256) $scope.charLength = 256;
 
 					var dict = DICT_ALPHANUMERIC;
 					if($scope.useSymbols) dict += DICT_SYMBOLS;
