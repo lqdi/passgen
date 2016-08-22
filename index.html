@@ -21,7 +21,7 @@
 
 			<div class="col-md-12">
 				<h1>
-					<span>LQDI Password Generator</span>
+					<span><i class="fa fa-key"></i> LQDI Password Generator</span>
 					<small>v1.0</small>
 					<a href="https://bitbucket.org/lqdi/lqdi-passgen" target="_blank" class="btn btn-default pull-right"><i class="fa fa-file-code-o"></i> Source-code</a>
 				</h1>
@@ -53,12 +53,11 @@
 								</label>
 							</div>
 
-
 						</div>
 
 					</div>
 					<div class="panel-footer clearfix">
-						<a class="btn btn-primary pull-right" ng-click="generate()">Generate</a>
+						<a class="btn btn-primary pull-right" ng-click="generate()"><i class="fa fa-gear"></i> Generate</a>
 					</div>
 				</div>
 
@@ -68,16 +67,16 @@
 					<div class="panel-heading">Generated password</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label for="fld-password">Password</label>
+							<label for="fld-password"><i class="fa fa-key"></i> Password</label>
 							<div class="input-group">
-								<input type="text" class="form-control" id="fld-password" readonly ng-model="password">
+								<input type="text" class="form-control" id="fld-password" ng-model="password">
 								<span class="input-group-btn">
 									<a class="btn btn-copy btn-success" data-clipboard-target="#fld-password"><i class="fa fa-clipboard"></i></a>
 								</span>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="fld-bcryptHash">BCRYPT Hash</label>
+							<label for="fld-bcryptHash"><i class="fa fa-code"></i> BCRYPT Hash</label>
 							<div class="input-group">
 								<input type="text" class="form-control" id="fld-bcryptHash" readonly ng-model="bcryptHash">
 								<span class="input-group-btn">
@@ -86,7 +85,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="fld-passwdHash">PHP-PASSWD Hash</label>
+							<label for="fld-passwdHash"><i class="fa fa-code"></i> PHP-PASSWD Hash</label>
 							<div class="input-group">
 								<input type="text" class="form-control" id="fld-passwdHash" readonly ng-model="passwdHash">
 								<span class="input-group-btn">
@@ -94,6 +93,9 @@
 								</span>
 							</div>
 						</div>
+					</div>
+					<div class="panel-footer clearfix" ng-show="password">
+						<a class="btn btn-default pull-right" ng-click="generateHashes()"><i class="fa fa-refresh"></i> Update hashes</a>
 					</div>
 				</div>
 			</div>
@@ -132,13 +134,17 @@
 
 					console.log("Generated password: ", $scope.password);
 
+					$scope.generateHashes();
+
+				};
+
+				$scope.generateHashes = function() {
 					$http.get('genhash.php', {params: {password: $scope.password}}).then(function (res) {
 						console.log("Generated hashes: ", res.data);
 
 						$scope.bcryptHash = res.data.bcrypt;
 						$scope.passwdHash = res.data.default;
 					});
-
 				};
 
 				function generatePassword(length, charset) {
