@@ -6,7 +6,7 @@ Simple password generation tool. Generates passwords based on a dictionary, and 
 Allows for generation via web tool and command-line
 
 ## Web usage
-![Web](http://extranet.lqdi.net/interno/passgen/screenshot_web.png)
+![Web](https://raw.githubusercontent.com/lqdi/passgen/main/images/screenshot.png)
 
 After installing on your web server, select the password length and symbol usage, and click "Generate" to generate the password. 
 
